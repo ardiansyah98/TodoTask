@@ -122,4 +122,5 @@ Or
 }
 
 ```
+Update todo will update value of UpdatedAt with current date time
 
