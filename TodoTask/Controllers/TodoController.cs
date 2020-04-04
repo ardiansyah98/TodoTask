@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using TodoTask.Contants;
 using TodoTask.Data;
 using TodoTask.Models;
 
@@ -81,10 +82,23 @@ namespace TodoTask.Controllers
             todo.Id = todo.Id == 0 ? old_todo.Id : todo.Id;
             todo.Title = todo.Title == null ? old_todo.Title : todo.Title;
             todo.Description = todo.Description == null ? old_todo.Description : todo.Description;
-            todo.Status = todo.Status == null ? old_todo.Status : todo.Status;
+            todo.CompletePercentage = todo.CompletePercentage == 0 ? old_todo.CompletePercentage : todo.CompletePercentage;
+            todo.Status = todo.Status == null ? old_todo.Status : todo.Status.ToUpper();
             todo.ExpiredAt = todo.ExpiredAt == DateTime.MinValue ? old_todo.ExpiredAt : todo.ExpiredAt;
             todo.CreatedAt = old_todo.CreatedAt;
             todo.UpdatedAt = DateTime.Now;
+
+
+            // set status and complete percentage on complete todo
+            if(todo.CompletePercentage == 100)
+            {
+                todo.Status = TodoConstants.STATUS_COMPLETE;
+            } 
+            else if(todo.Status.ToUpper() == TodoConstants.STATUS_COMPLETE)
+            {
+                todo.CompletePercentage = 100;
+            }
+                       
 
             // remove and add method to update value
             // old todo already mapped to new todo
